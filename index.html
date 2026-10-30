@@ -144,22 +144,117 @@
                     </ul>
                 </div>
 
-                <!-- Box 2: Zahlen & Fakten -->
-                <div class="postit bg-postitBlue p-2 sm:p-3 flex-1 flex flex-col justify-center relative transform rotate-1 border border-blue-200">
-                    <h2 class="font-marker text-base sm:text-lg md:text-xl text-blue-900 mb-1 flex items-center gap-1">
-                        📊 Zahlen & Fakten
-                    </h2>
-                    <div class="space-y-1 sm:space-y-2">
-                        <div class="bg-white/70 p-1.5 sm:p-2 rounded-lg border border-blue-300">
-                            <span class="font-marker text-xl sm:text-2xl text-blue-700 block">89 %</span>
-                            <span class="text-xs sm:text-sm leading-none block">der Jugendlichen (12-19 J.) nutzen täglich Social Media.</span>
-                            <span class="text-[10px] text-gray-500 block text-right mt-0.5">[1] JIM-Studie</span>
+                <!-- Box 2: Zahlen & Fakten (INTERAKTIV MIT DESTATIS DIAGRAMM AUF DER RÜCKSEITE) -->
+                <div class="flip-card cursor-pointer flex-1 h-full min-h-0" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        
+                        <!-- VORDERSEITE -->
+                        <div class="flip-card-front postit bg-postitBlue p-2 sm:p-3 flex flex-col justify-between border border-blue-200">
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <h2 class="font-marker text-base sm:text-lg text-blue-900">
+                                        📊 Zahlen & Fakten
+                                    </h2>
+                                    <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full font-bold">Klick für Grafik 🔄</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <div class="bg-white/70 p-1.5 rounded-lg border border-blue-300">
+                                        <span class="font-marker text-lg sm:text-xl text-blue-700 block">85 % (16-24 J.)</span>
+                                        <span class="text-xs leading-none block">nutzen aktiv soziale Medien (starker Anstieg).</span>
+                                    </div>
+                                    <div class="bg-white/70 p-1.5 rounded-lg border border-blue-300">
+                                        <span class="font-marker text-lg sm:text-xl text-blue-700 block">+10 % bis +13 %</span>
+                                        <span class="text-xs leading-none block">Wachstum auch bei Älteren (55-74 J.) seit 2021!</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span class="inline-block bg-blue-600 text-white font-marker text-xs px-2 py-1 rounded-md shadow-sm hover:bg-blue-700">
+                                    📊 Destatis-Statistik ansehen
+                                </span>
+                                <span class="text-[9px] text-gray-500 block mt-0.5">Quelle: Statistisches Bundesamt 2026</span>
+                            </div>
                         </div>
-                        <div class="bg-white/70 p-1.5 sm:p-2 rounded-lg border border-blue-300">
-                            <span class="font-marker text-xl sm:text-2xl text-blue-700 block">ca. 115 Min.</span>
-                            <span class="text-xs sm:text-sm leading-none block">durchschnittliche Nutzungsdauer pro Tag.</span>
-                            <span class="text-[10px] text-gray-500 block text-right mt-0.5">[2] MPFS / klicksafe</span>
+
+                        <!-- RÜCKSEITE (EMBEDDED DESTATIS DIAGRAMM) -->
+                        <div class="flip-card-back bg-white p-2 flex flex-col justify-between border-2 border-blue-400 text-left shadow-lg overflow-hidden">
+                            <div class="flex justify-between items-start border-b pb-1">
+                                <div>
+                                    <h3 class="font-bold text-xs sm:text-sm text-gray-900 leading-tight">Nutzung sozialer Medien</h3>
+                                    <p class="text-[10px] text-gray-500">Anteil an Bevölkerung nach Altersgruppen in %</p>
+                                </div>
+                                <span class="text-[9px] bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded font-marker">Zurück 🔄</span>
+                            </div>
+
+                            <!-- NACHGEBAUTES SVG-BALKENDIAGRAMM (2021 vs 2025) -->
+                            <div class="my-auto py-1">
+                                <svg viewBox="0 0 320 160" class="w-full h-auto max-h-[125px] text-[9px] font-sans">
+                                    <!-- HG Lines -->
+                                    <line x1="60" y1="10" x2="60" y2="135" stroke="#ccc" stroke-width="1"/>
+                                    <line x1="120" y1="10" x2="120" y2="135" stroke="#eee" stroke-dasharray="2"/>
+                                    <line x1="180" y1="10" x2="180" y2="135" stroke="#eee" stroke-dasharray="2"/>
+                                    <line x1="240" y1="10" x2="240" y2="135" stroke="#eee" stroke-dasharray="2"/>
+                                    <line x1="300" y1="10" x2="300" y2="135" stroke="#eee" stroke-dasharray="2"/>
+
+                                    <!-- X Axis Labels -->
+                                    <text x="60" y="145" text-anchor="middle" fill="#666">0</text>
+                                    <text x="120" y="145" text-anchor="middle" fill="#666">25</text>
+                                    <text x="180" y="145" text-anchor="middle" fill="#666">50</text>
+                                    <text x="240" y="145" text-anchor="middle" fill="#666">75</text>
+                                    <text x="300" y="145" text-anchor="middle" fill="#666">100%</text>
+
+                                    <!-- Bars Group: 16-24 J. (78% / 85%) -->
+                                    <text x="55" y="20" text-anchor="end" fill="#333" font-weight="bold">16-24 J.</text>
+                                    <rect x="60" y="12" width="204" height="4" fill="#2563eb"/> <!-- 2025: 85% = 204px -->
+                                    <rect x="60" y="18" width="187" height="4" fill="#93c5fd"/> <!-- 2021: 78% = 187px -->
+
+                                    <!-- Bars Group: 25-34 J. (69% / 80%) -->
+                                    <text x="55" y="37" text-anchor="end" fill="#333">25-34 J.</text>
+                                    <rect x="60" y="29" width="192" height="4" fill="#2563eb"/>
+                                    <rect x="60" y="35" width="165" height="4" fill="#93c5fd"/>
+
+                                    <!-- Bars Group: 35-44 J. (56% / 72%) -->
+                                    <text x="55" y="54" text-anchor="end" fill="#333">35-44 J.</text>
+                                    <rect x="60" y="46" width="172" height="4" fill="#2563eb"/>
+                                    <rect x="60" y="52" width="134" height="4" fill="#93c5fd"/>
+
+                                    <!-- Bars Group: 45-54 J. (43% / 58%) -->
+                                    <text x="55" y="71" text-anchor="end" fill="#333">45-54 J.</text>
+                                    <rect x="60" y="63" width="139" height="4" fill="#2563eb"/>
+                                    <rect x="60" y="69" width="103" height="4" fill="#93c5fd"/>
+
+                                    <!-- Bars Group: 55-64 J. (29% / 42%) -->
+                                    <text x="55" y="88" text-anchor="end" fill="#333">55-64 J.</text>
+                                    <rect x="60" y="80" width="100" height="4" fill="#2563eb"/>
+                                    <rect x="60" y="86" width="70" height="4" fill="#93c5fd"/>
+
+                                    <!-- Bars Group: 65-74 J. (15% / 25%) -->
+                                    <text x="55" y="105" text-anchor="end" fill="#333">65-74 J.</text>
+                                    <rect x="60" y="97" width="60" height="4" fill="#2563eb"/>
+                                    <rect x="60" y="103" width="36" height="4" fill="#93c5fd"/>
+
+                                    <!-- Bars Group: 16-74 J. Gesamt (47% / 59%) -->
+                                    <text x="55" y="122" text-anchor="end" fill="#1e40af" font-weight="bold">Gesamt</text>
+                                    <rect x="60" y="114" width="141" height="4" fill="#1e40af"/>
+                                    <rect x="60" y="120" width="112" height="4" fill="#60a5fa"/>
+                                </svg>
+                            </div>
+
+                            <!-- LEGENDE & QUELLE -->
+                            <div class="border-t pt-0.5">
+                                <div class="flex items-center justify-between text-[9px] mb-0.5">
+                                    <div class="flex items-center gap-2">
+                                        <span class="flex items-center gap-1"><span class="w-2 h-2 bg-blue-600 rounded-sm"></span> 2025</span>
+                                        <span class="flex items-center gap-1"><span class="w-2 h-2 bg-blue-300 rounded-sm"></span> 2021</span>
+                                    </div>
+                                    <span class="font-bold text-blue-900">IKT-Erhebung</span>
+                                </div>
+                                <p class="text-[8px] text-gray-500 leading-tight truncate">
+                                    © Statistisches Bundesamt (Destatis), 2026 | destatis.de/DE/Presse/Pressemitteilungen/2026/03/PD26_N014_63.html
+                                </p>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -295,10 +390,10 @@
         <footer class="mt-1 pt-1 border-t border-gray-300 flex flex-wrap justify-between items-center text-[10px] sm:text-xs text-gray-600 flex-shrink-0">
             <div class="flex items-center gap-2">
                 <span class="font-bold text-gray-800">Benutzte Quellen:</span>
-                <span>[1] JIM-Studie (mpfs.de)</span> | 
-                <span>[2] klicksafe.de</span> | 
-                <span>drugcom.de</span> | 
-                <span>umweltbundesamt.de</span>
+                <span>[1] Destatis 2026 (destatis.de/DE/Presse/Pressemitteilungen/2026/03/PD26_N014_63.html)</span> | 
+                <span>[2] JIM-Studie</span> | 
+                <span>klicksafe.de</span> | 
+                <span>drugcom.de</span>
             </div>
             <div class="font-caveat text-sm sm:text-base text-gray-700 font-bold">
                 Erstellt von Niklas Karoli
