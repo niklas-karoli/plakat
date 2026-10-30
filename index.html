@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plakat: Nutzung Sozialer Medien</title>
+    <!-- Google Fonts: Handschriften und Marker-Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        marker: ['"Permanent Marker"', 'cursive'],
+                        hand: ['"Patrick Hand"', 'cursive'],
+                        caveat: ['"Caveat"', 'cursive']
+                    },
+                    colors: {
+                        paper: '#fdfbf7',
+                        postitYellow: '#fef08a',
+                        postitBlue: '#bae6fd',
+                        postitPink: '#fbcfe8',
+                        postitGreen: '#bbf7d0',
+                        postitOrange: '#fed7aa',
+                        markerBlue: '#2563eb',
+                        markerRed: '#dc2626'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Verhindert jegliches Scrollen, um echtes Plakat-Feeling zu garantieren */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #e5e0d8;
+            user-select: none;
+        }
+
+        /* Papier-Substrat Texture & Plakat-Rahmen */
+        .poster-board {
+            background-color: #fcf9f2;
+            background-image: radial-gradient(#e2d9cc 1px, transparent 0);
+            background-size: 24px 24px;
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.06), 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        /* Handgezeichneter Strich-Effekt (SVG Border Simulation / Random Rotation) */
+        .hand-drawn-box {
+            border: 2.5px solid #2d3748;
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .postit {
+            box-shadow: 3px 5px 10px rgba(0,0,0,0.1);
+            border-radius: 2px 2px 20px 2px;
+        }
+
+        /* Flip Card Effekt für Mythos/Wahrheit */
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 12px;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Nadel / Klebeband Deko */
+        .tape {
+            background-color: rgba(255, 255, 255, 0.65);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            backdrop-filter: blur(1px);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-2 sm:p-4 font-hand text-gray-800">
+
+    <!-- HAUPT-PLAKAT CONTAINER (Füllt den Viewport flexibel aus ohne zu scrollen) -->
+    <div class="poster-board w-full h-full max-w-[1600px] max-h-[1000px] rounded-xl border-4 border-amber-900/20 p-2 sm:p-4 md:p-6 flex flex-col justify-between relative overflow-hidden">
+        
+        <!-- Deko Klebestreifen in den Ecken -->
+        <div class="tape absolute -top-2 left-10 w-24 h-7 rotate-[-6deg] z-20"></div>
+        <div class="tape absolute -top-2 right-12 w-28 h-7 rotate-[4deg] z-20"></div>
+
+        <!-- 1. PLAKAT-KOPF / TITEL -->
+        <header class="text-center relative py-1 mb-1 border-b-2 border-dashed border-gray-400/60 flex-shrink-0">
+            <div class="inline-block relative">
+                <h1 class="font-marker text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 tracking-wide transform -rotate-1 drop-shadow-sm">
+                    📱 Nutzung Sozialer Medien 🌐
+                </h1>
+                <span class="font-caveat text-lg sm:text-xl md:text-2xl text-markerBlue absolute -right-6 -bottom-3 sm:-right-12 sm:-bottom-4 rotate-[-12deg] font-bold">
+                    Chance oder Risiko?
+                </span>
+            </div>
+            <p class="font-caveat text-xs sm:text-base md:text-lg text-gray-600 mt-1">
+                Ein Blick auf Fakten, Psyche & Sicherheit im Netz
+            </p>
+        </header>
+
+        <!-- 2. HAUPTINHALT GRID (DYNAMISCHES LAYOUT FÜR JEDE BILDSCHIRMGRÖSSE) -->
+        <main class="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4 flex-grow min-h-0 overflow-hidden my-1">
+            
+            <!-- SPALTE 1: WAS IST ES? & ZAHLEN/FAKTEN -->
+            <section class="flex flex-col gap-2 sm:gap-3 h-full overflow-hidden">
+                
+                <!-- Box 1: Worum geht es? -->
+                <div class="postit bg-postitYellow p-2 sm:p-3 flex-1 flex flex-col justify-center relative transform -rotate-1 border border-yellow-300">
+                    <div class="tape absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-5 rotate-[1deg]"></div>
+                    <h2 class="font-marker text-base sm:text-lg md:text-xl text-yellow-900 mb-1 flex items-center gap-1">
+                        📌 Worum geht es?
+                    </h2>
+                    <p class="text-xs sm:text-sm md:text-base leading-tight">
+                        <strong>Social Media:</strong> Digitale Netzwerke (TikTok, Insta, YouTube) zur <span class="bg-yellow-200 px-1 rounded">Vernetzung</span>, Unterhaltung & Info-Beschaffung.
+                    </p>
+                    <ul class="text-xs sm:text-sm list-disc list-inside mt-1 space-y-0.5 text-gray-800">
+                        <li>Kommunikation in Echtzeit</li>
+                        <li>Inhalte erstellen & teilen</li>
+                    </ul>
+                </div>
+
+                <!-- Box 2: Zahlen & Fakten -->
+                <div class="postit bg-postitBlue p-2 sm:p-3 flex-1 flex flex-col justify-center relative transform rotate-1 border border-blue-200">
+                    <h2 class="font-marker text-base sm:text-lg md:text-xl text-blue-900 mb-1 flex items-center gap-1">
+                        📊 Zahlen & Fakten
+                    </h2>
+                    <div class="space-y-1 sm:space-y-2">
+                        <div class="bg-white/70 p-1.5 sm:p-2 rounded-lg border border-blue-300">
+                            <span class="font-marker text-xl sm:text-2xl text-blue-700 block">89 %</span>
+                            <span class="text-xs sm:text-sm leading-none block">der Jugendlichen (12-19 J.) nutzen täglich Social Media.</span>
+                            <span class="text-[10px] text-gray-500 block text-right mt-0.5">[1] JIM-Studie</span>
+                        </div>
+                        <div class="bg-white/70 p-1.5 sm:p-2 rounded-lg border border-blue-300">
+                            <span class="font-marker text-xl sm:text-2xl text-blue-700 block">ca. 115 Min.</span>
+                            <span class="text-xs sm:text-sm leading-none block">durchschnittliche Nutzungsdauer pro Tag.</span>
+                            <span class="text-[10px] text-gray-500 block text-right mt-0.5">[2] MPFS / klicksafe</span>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- SPALTE 2: URSACHEN & RISIKEN -->
+            <section class="flex flex-col gap-2 sm:gap-3 h-full overflow-hidden">
+                
+                <!-- Box 3: Ursachen & Hintergründe -->
+                <div class="postit bg-postitOrange p-2 sm:p-3 flex-1 flex flex-col justify-center relative transform rotate-1 border border-orange-200">
+                    <h2 class="font-marker text-base sm:text-lg md:text-xl text-orange-900 mb-1 flex items-center gap-1">
+                        🧠 Ursachen & Psychologie
+                    </h2>
+                    <ul class="text-xs sm:text-sm md:text-base space-y-1">
+                        <li class="flex items-start gap-1">
+                            <span>⚡</span>
+                            <span><strong>Dopamin-Kick:</strong> Likes & Benachrichtigungen aktivieren das Belohnungssystem.</span>
+                        </li>
+                        <li class="flex items-start gap-1">
+                            <span>😱</span>
+                            <span><strong>FOMO:</strong> <em>Fear Of Missing Out</em> – Angst, etwas Wichtiges zu verpassen.</span>
+                        </li>
+                        <li class="flex items-start gap-1">
+                            <span>👥</span>
+                            <span>Bedürfnis nach sozialer Anerkennung & Zugehörigkeit.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Box 4: Risiken & Folgen -->
+                <div class="postit bg-postitPink p-2 sm:p-3 flex-1 flex flex-col justify-center relative transform -rotate-1 border border-pink-200">
+                    <h2 class="font-marker text-base sm:text-lg md:text-xl text-pink-900 mb-1 flex items-center gap-1">
+                        ⚠️ Risiken & Folgen
+                    </h2>
+                    <div class="grid grid-cols-2 gap-1.5 text-xs sm:text-sm">
+                        <div class="bg-white/60 p-1.5 rounded border border-pink-300">
+                            <strong>💥 Psyche:</strong> Reizüberflutung, Schlafstörungen, Druck durch Vergleiche.
+                        </div>
+                        <div class="bg-white/60 p-1.5 rounded border border-pink-300">
+                            <strong>🚫 Gefahren:</strong> Cybermobbing, Fake News, Cybergrooming.
+                        </div>
+                    </div>
+                    <p class="font-caveat text-sm sm:text-base text-red-700 font-bold mt-1 text-center">
+                        "Perfekte Scheinwelten drücken oft das Selbstwertgefühl!"
+                    </p>
+                </div>
+
+            </section>
+
+            <!-- SPALTE 3: WAS TUN? & INTERAKTIVES QUIZ -->
+            <section class="flex flex-col gap-2 sm:gap-3 h-full overflow-hidden">
+                
+                <!-- Box 5: Was kann man tun? -->
+                <div class="postit bg-postitGreen p-2 sm:p-3 flex-1 flex flex-col justify-center relative transform -rotate-1 border border-green-200">
+                    <div class="tape absolute -top-3 right-4 w-16 h-5 rotate-[-3deg]"></div>
+                    <h2 class="font-marker text-base sm:text-lg md:text-xl text-green-900 mb-1 flex items-center gap-1">
+                        💡 Was kann man tun?
+                    </h2>
+                    <ul class="text-xs sm:text-sm md:text-base space-y-1">
+                        <li class="flex items-center gap-1">
+                            <span>⏱️</span> <strong>Digital Detox:</strong> Feste bildschirmfreie Zeiten & Limits.
+                        </li>
+                        <li class="flex items-center gap-1">
+                            <span>🔕</span> Push-Benachrichtigungen ausschalten.
+                        </li>
+                        <li class="flex items-center gap-1">
+                            <span>🔍</span> Quellen & Inhalte kritisch hinterfragen.
+                        </li>
+                    </ul>
+                    <div class="mt-1 bg-white/80 p-1.5 rounded text-[11px] sm:text-xs text-green-900 font-semibold border border-green-300 text-center">
+                        🆘 Hilfe: klicksafe.de | Nummer gegen Kummer: 116 111 | drugcom.de
+                    </div>
+                </div>
+
+                <!-- Box 6: Interaktiver Bereich (Mythos oder Wahrheit?) -->
+                <div class="hand-drawn-box bg-white p-2 sm:p-3 flex-1 flex flex-col justify-between relative border-gray-700 shadow-md">
+                    <div class="flex justify-between items-center mb-1">
+                        <h2 class="font-marker text-base sm:text-lg text-purple-900">
+                            ❓ Mythos oder Wahrheit?
+                        </h2>
+                        <span class="text-[10px] sm:text-xs bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded-full font-bold">Klick zum Aufdecken!</span>
+                    </div>
+
+                    <!-- KARTEN CONTAINER -->
+                    <div class="grid grid-cols-2 gap-2 flex-grow min-h-0">
+                        
+                        <!-- Karte 1 -->
+                        <div class="flip-card cursor-pointer h-full" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-purple-50 border-2 border-dashed border-purple-300 p-2 flex flex-col justify-center items-center text-center">
+                                    <span class="text-lg sm:text-2xl mb-1">💬</span>
+                                    <p class="text-[11px] sm:text-xs font-bold text-gray-800 leading-tight">
+                                        "Wer viel Social Media nutzt, hat mehr echte Freunde."
+                                    </p>
+                                    <span class="text-[10px] text-purple-600 mt-1 font-marker">Tippen 🔄</span>
+                                </div>
+                                <div class="flip-card-back bg-red-100 border-2 border-red-400 p-2 flex flex-col justify-center items-center text-center">
+                                    <span class="font-marker text-red-600 text-sm sm:text-base">❌ MYTHOS!</span>
+                                    <p class="text-[10px] sm:text-xs text-gray-800 mt-0.5 leading-tight">
+                                        Qualität geht vor Quantität. Exzessive Nutzung kann Einsamkeitsgefühle sogar verstärken.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Karte 2 -->
+                        <div class="flip-card cursor-pointer h-full" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-purple-50 border-2 border-dashed border-purple-300 p-2 flex flex-col justify-center items-center text-center">
+                                    <span class="text-lg sm:text-2xl mb-1">⚙️</span>
+                                    <p class="text-[11px] sm:text-xs font-bold text-gray-800 leading-tight">
+                                        "Algorithmen binden dich gezielt möglichst lange."
+                                    </p>
+                                    <span class="text-[10px] text-purple-600 mt-1 font-marker">Tippen 🔄</span>
+                                </div>
+                                <div class="flip-card-back bg-green-100 border-2 border-green-500 p-2 flex flex-col justify-center items-center text-center">
+                                    <span class="font-marker text-green-700 text-sm sm:text-base">✅ WAHRHEIT!</span>
+                                    <p class="text-[10px] sm:text-xs text-gray-800 mt-0.5 leading-tight">
+                                        Infinite Scroll & Pushs nutzen psychologische Muster aus, um Bildschirmzeit zu maximieren.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+        <!-- 3. PLAKAT-FUSSZEILE (QUELLENANGABEN) -->
+        <footer class="mt-1 pt-1 border-t border-gray-300 flex flex-wrap justify-between items-center text-[10px] sm:text-xs text-gray-600 flex-shrink-0">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-gray-800">📚 Seriöse Quellen:</span>
+                <span>[1] JIM-Studie (mpfs.de)</span> | 
+                <span>[2] klicksafe.de</span> | 
+                <span>drugcom.de</span> | 
+                <span>umweltbundesamt.de</span>
+            </div>
+            <div class="font-caveat text-sm sm:text-base text-gray-700 font-bold">
+                Erstellt für Präsentation & Hosting auf GitHub Pages 🚀
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+</html>
