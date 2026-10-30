@@ -53,7 +53,6 @@
             box-shadow: inset 0 0 80px rgba(0,0,0,0.06), 0 20px 40px rgba(0,0,0,0.2);
         }
 
-        /* Handgezeichneter Strich-Effekt (SVG Border Simulation / Random Rotation) */
         .hand-drawn-box {
             border: 2.5px solid #2d3748;
             border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
@@ -65,7 +64,7 @@
             border-radius: 2px 2px 20px 2px;
         }
 
-        /* Flip Card Effekt für Mythos/Wahrheit */
+        /* 3D-Flip Effekt */
         .flip-card {
             perspective: 1000px;
         }
@@ -91,24 +90,41 @@
             transform: rotateY(180deg);
         }
 
-        /* Nadel / Klebeband Deko */
+        /* Deko Klebestreifen */
         .tape {
             background-color: rgba(255, 255, 255, 0.65);
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             backdrop-filter: blur(1px);
         }
+
+        /* Smooth Zoom Modal Transition */
+        #zoomModal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #zoomModalContent {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+        }
+        #zoomModal.hidden-modal {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #zoomModal.hidden-modal #zoomModalContent {
+            transform: scale(0.6);
+            opacity: 0;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center p-2 sm:p-4 font-hand text-gray-800">
 
-    <!-- HAUPT-PLAKAT CONTAINER (Füllt den Viewport flexibel aus ohne zu scrollen) -->
+    <!-- HAUPT-PLAKAT CONTAINER -->
     <div class="poster-board w-full h-full max-w-[1600px] max-h-[1000px] rounded-xl border-4 border-amber-900/20 p-2 sm:p-4 md:p-6 flex flex-col justify-between relative overflow-hidden">
         
-        <!-- Deko Klebestreifen in den Ecken -->
+        <!-- Deko Klebestreifen -->
         <div class="tape absolute -top-2 left-10 w-24 h-7 rotate-[-6deg] z-20"></div>
         <div class="tape absolute -top-2 right-12 w-28 h-7 rotate-[4deg] z-20"></div>
 
-        <!-- 1. PLAKAT-KOPF / TITEL -->
+        <!-- 1. HEADER -->
         <header class="text-center relative py-1 mb-1 border-b-2 border-dashed border-gray-400/60 flex-shrink-0">
             <div class="inline-block relative">
                 <h1 class="font-marker text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 tracking-wide transform -rotate-1 drop-shadow-sm">
@@ -123,10 +139,10 @@
             </p>
         </header>
 
-        <!-- 2. HAUPTINHALT GRID (DYNAMISCHES LAYOUT FÜR JEDE BILDSCHIRMGRÖSSE) -->
+        <!-- 2. HAUPTGRID -->
         <main class="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4 flex-grow min-h-0 overflow-hidden my-1">
             
-            <!-- SPALTE 1: WAS IST ES? & ZAHLEN/FAKTEN -->
+            <!-- SPALTE 1 -->
             <section class="flex flex-col gap-2 sm:gap-3 h-full overflow-hidden">
                 
                 <!-- Box 1: Worum geht es? -->
@@ -144,11 +160,11 @@
                     </ul>
                 </div>
 
-                <!-- Box 2: Zahlen & Fakten (INTERAKTIV MIT DESTATIS DIAGRAMM AUF DER RÜCKSEITE) -->
-                <div class="flip-card cursor-pointer flex-1 h-full min-h-0" onclick="this.classList.toggle('flipped')">
+                <!-- Box 2: Zahlen & Fakten (INTERAKTIV FLIP-KARTE MIT LUPEN-FUNKTION) -->
+                <div id="statsCard" class="flip-card cursor-pointer flex-1 h-full min-h-0" onclick="handleCardClick(event)">
                     <div class="flip-card-inner">
                         
-                        <!-- VORDERSEITE -->
+                        <!-- VORDERSEITE (OHNE BUTTON) -->
                         <div class="flip-card-front postit bg-postitBlue p-2 sm:p-3 flex flex-col justify-between border border-blue-200">
                             <div>
                                 <div class="flex justify-between items-center mb-1">
@@ -157,90 +173,90 @@
                                     </h2>
                                     <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full font-bold">Klick für Grafik 🔄</span>
                                 </div>
-                                <div class="space-y-1">
-                                    <div class="bg-white/70 p-1.5 rounded-lg border border-blue-300">
-                                        <span class="font-marker text-lg sm:text-xl text-blue-700 block">85 % (16-24 J.)</span>
-                                        <span class="text-xs leading-none block">nutzen aktiv soziale Medien (starker Anstieg).</span>
+                                <div class="space-y-1.5 mt-2">
+                                    <div class="bg-white/70 p-2 rounded-lg border border-blue-300">
+                                        <span class="font-marker text-lg sm:text-xl text-blue-700 block">85 % (16–24 J.) <sup class="text-xs font-bold text-gray-700">[1]</sup></span>
+                                        <span class="text-xs leading-tight block">nutzen aktiv soziale Medien (starker Anstieg gegenüber 2021).</span>
                                     </div>
-                                    <div class="bg-white/70 p-1.5 rounded-lg border border-blue-300">
-                                        <span class="font-marker text-lg sm:text-xl text-blue-700 block">+10 % bis +13 %</span>
-                                        <span class="text-xs leading-none block">Wachstum auch bei Älteren (55-74 J.) seit 2021!</span>
+                                    <div class="bg-white/70 p-2 rounded-lg border border-blue-300">
+                                        <span class="font-marker text-lg sm:text-xl text-blue-700 block">+10 % bis +13 % <sup class="text-xs font-bold text-gray-700">[1]</sup></span>
+                                        <span class="text-xs leading-tight block">Wachstum auch bei Älteren (55–74 J.) seit 2021!</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="text-center mt-1">
-                                <span class="inline-block bg-blue-600 text-white font-marker text-xs px-2 py-1 rounded-md shadow-sm hover:bg-blue-700">
-                                    📊 Destatis-Statistik ansehen
-                                </span>
-                                <span class="text-[9px] text-gray-500 block mt-0.5">Quelle: Statistisches Bundesamt 2026</span>
+                                <span class="text-[10px] text-gray-600 block italic">Tippe auf das Post-it für das Diagramm</span>
                             </div>
                         </div>
 
-                        <!-- RÜCKSEITE (EMBEDDED DESTATIS DIAGRAMM) -->
+                        <!-- RÜCKSEITE (DIAGRAMM + LUPE) -->
                         <div class="flip-card-back bg-white p-2 flex flex-col justify-between border-2 border-blue-400 text-left shadow-lg overflow-hidden">
                             <div class="flex justify-between items-start border-b pb-1">
                                 <div>
                                     <h3 class="font-bold text-xs sm:text-sm text-gray-900 leading-tight">Nutzung sozialer Medien</h3>
-                                    <p class="text-[10px] text-gray-500">Anteil an Bevölkerung nach Altersgruppen in %</p>
+                                    <p class="text-[10px] text-gray-500">Anteil an Bevölkerung in % [1]</p>
                                 </div>
-                                <span class="text-[9px] bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded font-marker">Zurück 🔄</span>
+                                <div class="flex items-center gap-1">
+                                    <!-- LUPE BUTTON -->
+                                    <button onclick="openZoomModal(event)" title="Auf Bildschirmgröße zoomen" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-0.5 rounded font-bold shadow transition flex items-center gap-1">
+                                        🔍 <span class="hidden sm:inline">Zoom</span>
+                                    </button>
+                                    <span class="text-[9px] bg-gray-100 text-gray-700 px-1 py-0.5 rounded font-marker">Zurück 🔄</span>
+                                </div>
                             </div>
 
-                            <!-- NACHGEBAUTES SVG-BALKENDIAGRAMM (2021 vs 2025) -->
+                            <!-- SVG-BALKENDIAGRAMM -->
                             <div class="my-auto py-1">
-                                <svg viewBox="0 0 320 160" class="w-full h-auto max-h-[125px] text-[9px] font-sans">
-                                    <!-- HG Lines -->
-                                    <line x1="60" y1="10" x2="60" y2="135" stroke="#ccc" stroke-width="1"/>
-                                    <line x1="120" y1="10" x2="120" y2="135" stroke="#eee" stroke-dasharray="2"/>
-                                    <line x1="180" y1="10" x2="180" y2="135" stroke="#eee" stroke-dasharray="2"/>
-                                    <line x1="240" y1="10" x2="240" y2="135" stroke="#eee" stroke-dasharray="2"/>
-                                    <line x1="300" y1="10" x2="300" y2="135" stroke="#eee" stroke-dasharray="2"/>
+                                <svg viewBox="0 0 320 150" class="w-full h-auto max-h-[125px] text-[9px] font-sans">
+                                    <line x1="60" y1="10" x2="60" y2="125" stroke="#ccc" stroke-width="1"/>
+                                    <line x1="120" y1="10" x2="120" y2="125" stroke="#eee" stroke-dasharray="2"/>
+                                    <line x1="180" y1="10" x2="180" y2="125" stroke="#eee" stroke-dasharray="2"/>
+                                    <line x1="240" y1="10" x2="240" y2="125" stroke="#eee" stroke-dasharray="2"/>
+                                    <line x1="300" y1="10" x2="300" y2="125" stroke="#eee" stroke-dasharray="2"/>
 
-                                    <!-- X Axis Labels -->
-                                    <text x="60" y="145" text-anchor="middle" fill="#666">0</text>
-                                    <text x="120" y="145" text-anchor="middle" fill="#666">25</text>
-                                    <text x="180" y="145" text-anchor="middle" fill="#666">50</text>
-                                    <text x="240" y="145" text-anchor="middle" fill="#666">75</text>
-                                    <text x="300" y="145" text-anchor="middle" fill="#666">100%</text>
+                                    <text x="60" y="135" text-anchor="middle" fill="#666">0</text>
+                                    <text x="120" y="135" text-anchor="middle" fill="#666">25</text>
+                                    <text x="180" y="135" text-anchor="middle" fill="#666">50</text>
+                                    <text x="240" y="135" text-anchor="middle" fill="#666">75</text>
+                                    <text x="300" y="135" text-anchor="middle" fill="#666">100%</text>
 
-                                    <!-- Bars Group: 16-24 J. (78% / 85%) -->
+                                    <!-- 16-24 J. -->
                                     <text x="55" y="20" text-anchor="end" fill="#333" font-weight="bold">16-24 J.</text>
-                                    <rect x="60" y="12" width="204" height="4" fill="#2563eb"/> <!-- 2025: 85% = 204px -->
-                                    <rect x="60" y="18" width="187" height="4" fill="#93c5fd"/> <!-- 2021: 78% = 187px -->
+                                    <rect x="60" y="12" width="204" height="4" fill="#2563eb"/>
+                                    <rect x="60" y="18" width="187" height="4" fill="#93c5fd"/>
 
-                                    <!-- Bars Group: 25-34 J. (69% / 80%) -->
-                                    <text x="55" y="37" text-anchor="end" fill="#333">25-34 J.</text>
-                                    <rect x="60" y="29" width="192" height="4" fill="#2563eb"/>
-                                    <rect x="60" y="35" width="165" height="4" fill="#93c5fd"/>
+                                    <!-- 25-34 J. -->
+                                    <text x="55" y="36" text-anchor="end" fill="#333">25-34 J.</text>
+                                    <rect x="60" y="28" width="192" height="4" fill="#2563eb"/>
+                                    <rect x="60" y="34" width="165" height="4" fill="#93c5fd"/>
 
-                                    <!-- Bars Group: 35-44 J. (56% / 72%) -->
-                                    <text x="55" y="54" text-anchor="end" fill="#333">35-44 J.</text>
-                                    <rect x="60" y="46" width="172" height="4" fill="#2563eb"/>
-                                    <rect x="60" y="52" width="134" height="4" fill="#93c5fd"/>
+                                    <!-- 35-44 J. -->
+                                    <text x="55" y="52" text-anchor="end" fill="#333">35-44 J.</text>
+                                    <rect x="60" y="44" width="172" height="4" fill="#2563eb"/>
+                                    <rect x="60" y="50" width="134" height="4" fill="#93c5fd"/>
 
-                                    <!-- Bars Group: 45-54 J. (43% / 58%) -->
-                                    <text x="55" y="71" text-anchor="end" fill="#333">45-54 J.</text>
-                                    <rect x="60" y="63" width="139" height="4" fill="#2563eb"/>
-                                    <rect x="60" y="69" width="103" height="4" fill="#93c5fd"/>
+                                    <!-- 45-54 J. -->
+                                    <text x="55" y="68" text-anchor="end" fill="#333">45-54 J.</text>
+                                    <rect x="60" y="60" width="139" height="4" fill="#2563eb"/>
+                                    <rect x="60" y="66" width="103" height="4" fill="#93c5fd"/>
 
-                                    <!-- Bars Group: 55-64 J. (29% / 42%) -->
-                                    <text x="55" y="88" text-anchor="end" fill="#333">55-64 J.</text>
-                                    <rect x="60" y="80" width="100" height="4" fill="#2563eb"/>
-                                    <rect x="60" y="86" width="70" height="4" fill="#93c5fd"/>
+                                    <!-- 55-64 J. -->
+                                    <text x="55" y="84" text-anchor="end" fill="#333">55-64 J.</text>
+                                    <rect x="60" y="76" width="100" height="4" fill="#2563eb"/>
+                                    <rect x="60" y="82" width="70" height="4" fill="#93c5fd"/>
 
-                                    <!-- Bars Group: 65-74 J. (15% / 25%) -->
-                                    <text x="55" y="105" text-anchor="end" fill="#333">65-74 J.</text>
-                                    <rect x="60" y="97" width="60" height="4" fill="#2563eb"/>
-                                    <rect x="60" y="103" width="36" height="4" fill="#93c5fd"/>
+                                    <!-- 65-74 J. -->
+                                    <text x="55" y="100" text-anchor="end" fill="#333">65-74 J.</text>
+                                    <rect x="60" y="92" width="60" height="4" fill="#2563eb"/>
+                                    <rect x="60" y="98" width="36" height="4" fill="#93c5fd"/>
 
-                                    <!-- Bars Group: 16-74 J. Gesamt (47% / 59%) -->
-                                    <text x="55" y="122" text-anchor="end" fill="#1e40af" font-weight="bold">Gesamt</text>
-                                    <rect x="60" y="114" width="141" height="4" fill="#1e40af"/>
-                                    <rect x="60" y="120" width="112" height="4" fill="#60a5fa"/>
+                                    <!-- Gesamt -->
+                                    <text x="55" y="116" text-anchor="end" fill="#1e40af" font-weight="bold">Gesamt</text>
+                                    <rect x="60" y="108" width="141" height="4" fill="#1e40af"/>
+                                    <rect x="60" y="114" width="112" height="4" fill="#60a5fa"/>
                                 </svg>
                             </div>
 
-                            <!-- LEGENDE & QUELLE -->
                             <div class="border-t pt-0.5">
                                 <div class="flex items-center justify-between text-[9px] mb-0.5">
                                     <div class="flex items-center gap-2">
@@ -249,9 +265,6 @@
                                     </div>
                                     <span class="font-bold text-blue-900">IKT-Erhebung</span>
                                 </div>
-                                <p class="text-[8px] text-gray-500 leading-tight truncate">
-                                    © Statistisches Bundesamt (Destatis), 2026 | destatis.de/DE/Presse/Pressemitteilungen/2026/03/PD26_N014_63.html
-                                </p>
                             </div>
                         </div>
 
@@ -260,7 +273,7 @@
 
             </section>
 
-            <!-- SPALTE 2: URSACHEN & RISIKEN -->
+            <!-- SPALTE 2 -->
             <section class="flex flex-col gap-2 sm:gap-3 h-full overflow-hidden">
                 
                 <!-- Box 3: Ursachen & Hintergründe -->
@@ -287,7 +300,7 @@
                 <!-- Box 4: Risiken & Folgen -->
                 <div class="postit bg-postitPink p-2 sm:p-3 flex-1 flex flex-col justify-center relative transform -rotate-1 border border-pink-200">
                     <h2 class="font-marker text-base sm:text-lg md:text-xl text-pink-900 mb-1 flex items-center gap-1">
-                        ⚠️ Risiken & Folgen
+                        ⚠️ Risiken & Folgen <sup class="text-xs text-gray-700">[2]</sup>
                     </h2>
                     <div class="grid grid-cols-2 gap-1.5 text-xs sm:text-sm">
                         <div class="bg-white/60 p-1.5 rounded border border-pink-300">
@@ -304,14 +317,14 @@
 
             </section>
 
-            <!-- SPALTE 3: WAS TUN? & INTERAKTIVES QUIZ -->
+            <!-- SPALTE 3 -->
             <section class="flex flex-col gap-2 sm:gap-3 h-full overflow-hidden">
                 
                 <!-- Box 5: Was kann man tun? -->
                 <div class="postit bg-postitGreen p-2 sm:p-3 flex-1 flex flex-col justify-center relative transform -rotate-1 border border-green-200">
                     <div class="tape absolute -top-3 right-4 w-16 h-5 rotate-[-3deg]"></div>
                     <h2 class="font-marker text-base sm:text-lg md:text-xl text-green-900 mb-1 flex items-center gap-1">
-                        💡 Was kann man tun?
+                        💡 Was kann man tun? <sup class="text-xs text-gray-700">[3]</sup>
                     </h2>
                     <ul class="text-xs sm:text-sm md:text-base space-y-1">
                         <li class="flex items-center gap-1">
@@ -329,7 +342,7 @@
                     </div>
                 </div>
 
-                <!-- Box 6: Interaktiver Bereich (Mythos oder Wahrheit?) -->
+                <!-- Box 6: Mythos oder Wahrheit -->
                 <div class="hand-drawn-box bg-white p-2 sm:p-3 flex-1 flex flex-col justify-between relative border-gray-700 shadow-md">
                     <div class="flex justify-between items-center mb-1">
                         <h2 class="font-marker text-base sm:text-lg text-purple-900">
@@ -338,9 +351,7 @@
                         <span class="text-[10px] sm:text-xs bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded-full font-bold">Klick zum Aufdecken!</span>
                     </div>
 
-                    <!-- KARTEN CONTAINER -->
                     <div class="grid grid-cols-2 gap-2 flex-grow min-h-0">
-                        
                         <!-- Karte 1 -->
                         <div class="flip-card cursor-pointer h-full" onclick="this.classList.toggle('flipped')">
                             <div class="flip-card-inner">
@@ -378,7 +389,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -386,14 +396,13 @@
 
         </main>
 
-        <!-- 3. PLAKAT-FUSSZEILE (QUELLENANGABEN) -->
+        <!-- 3. FOOTER / QUELLEN (MIT ANKLICKBAREM DESTATIS-HYPERLINK) -->
         <footer class="mt-1 pt-1 border-t border-gray-300 flex flex-wrap justify-between items-center text-[10px] sm:text-xs text-gray-600 flex-shrink-0">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                 <span class="font-bold text-gray-800">Benutzte Quellen:</span>
-                <span>[1] Destatis 2026 (destatis.de/DE/Presse/Pressemitteilungen/2026/03/PD26_N014_63.html)</span> | 
+                <span>[1] <a href="https://www.destatis.de/DE/Presse/Pressemitteilungen/2026/03/PD26_N014_63.html" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-bold hover:text-blue-800">Destatis</a> (2026)</span> | 
                 <span>[2] JIM-Studie</span> | 
-                <span>klicksafe.de</span> | 
-                <span>drugcom.de</span>
+                <span>[3] klicksafe.de / drugcom.de</span>
             </div>
             <div class="font-caveat text-sm sm:text-base text-gray-700 font-bold">
                 Erstellt von Niklas Karoli
@@ -402,5 +411,115 @@
 
     </div>
 
+    <!-- 4. LIGHTBOX MODAL FÜR SMOOTHEN LUPEN-ZOOM DER STATISTIK -->
+    <div id="zoomModal" class="hidden-modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onclick="closeZoomModal()">
+        <div id="zoomModalContent" class="bg-white p-4 sm:p-6 rounded-2xl max-w-4xl w-full max-h-[90vh] shadow-2xl flex flex-col justify-between border-4 border-blue-500 relative" onclick="event.stopPropagation()">
+            <!-- CLOSE BUTTON -->
+            <button onclick="closeZoomModal()" class="absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition">
+                ✕
+            </button>
+
+            <div class="mb-2 border-b pb-2">
+                <h2 class="font-marker text-lg sm:text-2xl text-blue-900">
+                    📊 Nutzung sozialer Medien in Deutschland
+                </h2>
+                <p class="text-xs sm:text-sm text-gray-600">
+                    Anteil an der Bevölkerung nach Altersgruppen in % (Vergleich 2021 vs. 2025)
+                </p>
+            </div>
+
+            <!-- GROSSES SVG DIAGRAMM -->
+            <div class="my-auto py-2">
+                <svg viewBox="0 0 320 150" class="w-full h-auto max-h-[50vh] font-sans text-[10px]">
+                    <line x1="60" y1="10" x2="60" y2="125" stroke="#ccc" stroke-width="1"/>
+                    <line x1="120" y1="10" x2="120" y2="125" stroke="#eee" stroke-dasharray="2"/>
+                    <line x1="180" y1="10" x2="180" y2="125" stroke="#eee" stroke-dasharray="2"/>
+                    <line x1="240" y1="10" x2="240" y2="125" stroke="#eee" stroke-dasharray="2"/>
+                    <line x1="300" y1="10" x2="300" y2="125" stroke="#eee" stroke-dasharray="2"/>
+
+                    <text x="60" y="138" text-anchor="middle" fill="#666" font-weight="bold">0</text>
+                    <text x="120" y="138" text-anchor="middle" fill="#666" font-weight="bold">25</text>
+                    <text x="180" y="138" text-anchor="middle" fill="#666" font-weight="bold">50</text>
+                    <text x="240" y="138" text-anchor="middle" fill="#666" font-weight="bold">75</text>
+                    <text x="300" y="138" text-anchor="middle" fill="#666" font-weight="bold">100%</text>
+
+                    <!-- 16-24 J. -->
+                    <text x="55" y="20" text-anchor="end" fill="#333" font-weight="bold">16–24 J.</text>
+                    <rect x="60" y="12" width="204" height="4.5" fill="#2563eb" rx="1"/>
+                    <rect x="60" y="18" width="187" height="4.5" fill="#93c5fd" rx="1"/>
+
+                    <!-- 25-34 J. -->
+                    <text x="55" y="36" text-anchor="end" fill="#333" font-weight="bold">25–34 J.</text>
+                    <rect x="60" y="28" width="192" height="4.5" fill="#2563eb" rx="1"/>
+                    <rect x="60" y="34" width="165" height="4.5" fill="#93c5fd" rx="1"/>
+
+                    <!-- 35-44 J. -->
+                    <text x="55" y="52" text-anchor="end" fill="#333" font-weight="bold">35–44 J.</text>
+                    <rect x="60" y="44" width="172" height="4.5" fill="#2563eb" rx="1"/>
+                    <rect x="60" y="50" width="134" height="4.5" fill="#93c5fd" rx="1"/>
+
+                    <!-- 45-54 J. -->
+                    <text x="55" y="68" text-anchor="end" fill="#333" font-weight="bold">45–54 J.</text>
+                    <rect x="60" y="60" width="139" height="4.5" fill="#2563eb" rx="1"/>
+                    <rect x="60" y="66" width="103" height="4.5" fill="#93c5fd" rx="1"/>
+
+                    <!-- 55-64 J. -->
+                    <text x="55" y="84" text-anchor="end" fill="#333" font-weight="bold">55–64 J.</text>
+                    <rect x="60" y="76" width="100" height="4.5" fill="#2563eb" rx="1"/>
+                    <rect x="60" y="82" width="70" height="4.5" fill="#93c5fd" rx="1"/>
+
+                    <!-- 65-74 J. -->
+                    <text x="55" y="100" text-anchor="end" fill="#333" font-weight="bold">65–74 J.</text>
+                    <rect x="60" y="92" width="60" height="4.5" fill="#2563eb" rx="1"/>
+                    <rect x="60" y="98" width="36" height="4.5" fill="#93c5fd" rx="1"/>
+
+                    <!-- Gesamt -->
+                    <text x="55" y="116" text-anchor="end" fill="#1e40af" font-weight="bold">Gesamt</text>
+                    <rect x="60" y="108" width="141" height="4.5" fill="#1e40af" rx="1"/>
+                    <rect x="60" y="114" width="112" height="4.5" fill="#60a5fa" rx="1"/>
+                </svg>
+            </div>
+
+            <!-- MODAL LEGENDE & FOOTER -->
+            <div class="border-t pt-2 flex flex-wrap items-center justify-between text-xs sm:text-sm">
+                <div class="flex items-center gap-4 font-bold">
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-blue-600 rounded-sm"></span> Jahr 2025</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-blue-300 rounded-sm"></span> Jahr 2021</span>
+                </div>
+                <div class="text-gray-600 text-right">
+                    Quelle: IKT-Erhebung private Haushalte, <a href="https://www.destatis.de/DE/Presse/Pressemitteilungen/2026/03/PD26_N014_63.html" target="_blank" class="text-blue-600 underline font-bold">Statistisches Bundesamt (Destatis)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIK -->
+    <script>
+        // Karte flippen, es sei denn der Lupe-Button wurde geklickt
+        function handleCardClick(event) {
+            const card = document.getElementById('statsCard');
+            card.classList.toggle('flipped');
+        }
+
+        // Öffnet das vergrößerte Modal mit Zoom-Animation
+        function openZoomModal(event) {
+            event.stopPropagation(); // Verhindert, dass die Karte beim Klick auf die Lupe zurückflippt
+            const modal = document.getElementById('zoomModal');
+            modal.classList.remove('hidden-modal');
+        }
+
+        // Schließt das Modal
+        function closeZoomModal() {
+            const modal = document.getElementById('zoomModal');
+            modal.classList.add('hidden-modal');
+        }
+
+        // Esc-Taste zum Schließen des Modals
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeZoomModal();
+            }
+        });
+    </script>
 </body>
 </html>
